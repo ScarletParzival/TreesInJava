@@ -1,0 +1,7 @@
+#Java compiler files
+*.class
+
+#IntelliJ artifacts
+*.iml
+*.xml
+.name
