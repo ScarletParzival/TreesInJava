@@ -1,5 +1,8 @@
 package General;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 /**
  * Created with IntelliJ IDEA.
  * User: sowmyahariharan
@@ -39,14 +42,14 @@ public class BinaryTree {
     public void inOrderTraversal(BinaryTreeNode node){
         if(node!=null){
             inOrderTraversal(node.leftChild);
-            System.out.print(node.toString()+" ");
+            System.out.print(node.toString() + " ");
             inOrderTraversal(node.rightChild);
         }
     }
 
     public void preOrderTraversal(BinaryTreeNode node){
         if(node!=null){
-            System.out.print(node.toString()+" ");
+            System.out.print(node.toString() + " ");
             preOrderTraversal(node.leftChild);
             preOrderTraversal(node.rightChild);
         }
@@ -56,7 +59,70 @@ public class BinaryTree {
         if(node!=null){
             postOrderTraversal(node.leftChild);
             postOrderTraversal(node.rightChild);
-            System.out.print(node.toString()+" ");
+            System.out.print(node.toString() + " ");
+        }
+    }
+
+    public void levelOrderTraversal(int numberOfQueues){
+        switch(numberOfQueues){
+            case 2:{
+                levelOrderTraversalUsingTwoQueues();
+                break;
+            }
+            case 1:{
+                levelOrderTraversal();
+                break;
+            }
+            default:
+              break;
+        }
+    }
+
+    private void levelOrderTraversal(){
+       if(root == null){
+           return;
+       }
+       int numberOfNodesInCurrentLevel = 1;
+       int numberOfNodesInNextLevel = 0;
+       Queue<BinaryTreeNode> queue = new LinkedList<BinaryTreeNode>();
+       queue.add(root);
+       while(!queue.isEmpty()){
+           BinaryTreeNode currentNode = queue.poll();
+           --numberOfNodesInCurrentLevel;
+           if(currentNode!=null){
+               System.out.print(currentNode+" ");
+               queue.add(currentNode.leftChild);
+               queue.add(currentNode.rightChild);
+               numberOfNodesInNextLevel += 2;
+           }
+           if(numberOfNodesInCurrentLevel == 0){
+               if(currentNode!=null){
+                   System.out.println();
+               }
+               numberOfNodesInCurrentLevel = numberOfNodesInNextLevel;
+               numberOfNodesInNextLevel = 0;
+           }
+       }
+    }
+    public void levelOrderTraversalUsingTwoQueues(){
+        if(root == null){
+            return;
+        }
+        Queue<BinaryTreeNode> currentLevel = new LinkedList<BinaryTreeNode>();
+        Queue<BinaryTreeNode> nextLevel = new LinkedList<BinaryTreeNode>();
+        currentLevel.add(root);
+        while(!currentLevel.isEmpty()){
+            BinaryTreeNode currentNode = currentLevel.poll();
+            if(currentNode!=null){
+                System.out.print(currentNode+" ");
+                nextLevel.add(currentNode.leftChild);
+                nextLevel.add(currentNode.rightChild);
+            }
+            if(currentLevel.isEmpty()){
+                System.out.println();
+                currentLevel = nextLevel;
+                nextLevel = new LinkedList<BinaryTreeNode>();
+            }
         }
     }
 
@@ -77,19 +143,31 @@ public class BinaryTree {
 
     public static void main(String[] args) {
         BinaryTree tree = new BinaryTree();
-        tree.root = new BinaryTreeNode( 7);
+
+        tree.root = new BinaryTreeNode(4);
         tree.addNode(2);
-        tree.addNode(24);
-        tree.addNode(30);
-        System.out.println("Printing root: "+tree.root);
+        tree.addNode(6);
+        tree.addNode(1);
+        tree.addNode(3);
+        tree.addNode(5);
+        tree.addNode(7);
+
+        System.out.println("Printing root: " + tree.root);
+
         System.out.println("\nIn-order traversal");
         tree.inOrderTraversal(tree.root);
+
         System.out.println("\n\nPre-order traversal");
         tree.preOrderTraversal(tree.root);
+
         System.out.println("\n\nPost-order traversal");
         tree.postOrderTraversal(tree.root);
-        System.out.println("\n\nFinding a node:");
-        System.out.println(tree.findNode(30));
+
+        System.out.println("\n\nLevel-order traversal");
+        tree.levelOrderTraversal();
+
+        System.out.println("\nFinding a node:");
+        System.out.println(tree.findNode(3));
     }
 
 }
