@@ -11,15 +11,15 @@ public class BinaryTree {
 
     BinaryTreeNode root;
 
-    public void addNode(String name,int key){
+    public void addNode(int key){
 
-        BinaryTreeNode newNode = new BinaryTreeNode(name, key);
+        BinaryTreeNode newNode = new BinaryTreeNode(key);
         BinaryTreeNode currentNode = root;
         BinaryTreeNode parentNode;
 
         while(true){
             parentNode = currentNode;
-            if(key < currentNode.birthday){
+            if(key < currentNode.key){
                 currentNode = currentNode.leftChild;
                 if(currentNode == null){
                     parentNode.leftChild = newNode;
@@ -39,14 +39,14 @@ public class BinaryTree {
     public void inOrderTraversal(BinaryTreeNode node){
         if(node!=null){
             inOrderTraversal(node.leftChild);
-            System.out.println(node.toString()+" ");
+            System.out.print(node.toString()+" ");
             inOrderTraversal(node.rightChild);
         }
     }
 
     public void preOrderTraversal(BinaryTreeNode node){
         if(node!=null){
-            System.out.println(node.toString()+" ");
+            System.out.print(node.toString()+" ");
             preOrderTraversal(node.leftChild);
             preOrderTraversal(node.rightChild);
         }
@@ -56,16 +56,16 @@ public class BinaryTree {
         if(node!=null){
             postOrderTraversal(node.leftChild);
             postOrderTraversal(node.rightChild);
-            System.out.println(node.toString()+" ");
+            System.out.print(node.toString()+" ");
         }
     }
 
     public BinaryTreeNode findNode(int key){
         BinaryTreeNode currentNode = root;
         while(currentNode!=null){
-            if(currentNode.birthday == key)
+            if(currentNode.key == key)
                 return currentNode;
-            if(key < currentNode.birthday){
+            if(key < currentNode.key){
                 currentNode = currentNode.leftChild;
             }
             else{
@@ -77,31 +77,33 @@ public class BinaryTree {
 
     public static void main(String[] args) {
         BinaryTree tree = new BinaryTree();
-        tree.root = new BinaryTreeNode("Sowmya", 7);
-        tree.addNode("Vinitha", 2);
-        tree.addNode("Silvia", 24);
-        tree.addNode("Sai",30);
-        System.out.println(tree.root);
+        tree.root = new BinaryTreeNode( 7);
+        tree.addNode(2);
+        tree.addNode(24);
+        tree.addNode(30);
+        System.out.println("Printing root: "+tree.root);
+        System.out.println("\nIn-order traversal");
         tree.inOrderTraversal(tree.root);
+        System.out.println("\n\nPre-order traversal");
         tree.preOrderTraversal(tree.root);
+        System.out.println("\n\nPost-order traversal");
         tree.postOrderTraversal(tree.root);
+        System.out.println("\n\nFinding a node:");
         System.out.println(tree.findNode(30));
     }
 
 }
 
 class BinaryTreeNode{
-    String name;
-    int birthday;
+    int key;
     BinaryTreeNode leftChild;
     BinaryTreeNode rightChild;
 
-    BinaryTreeNode(String name, int key){
-        this.birthday = key;
-        this.name = name;
+    BinaryTreeNode(int key){
+        this.key = key;
     }
 
     public String toString(){
-        return name + " has her birthday on: " + birthday;
+        return ""+key;
     }
 }
