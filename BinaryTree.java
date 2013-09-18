@@ -1,5 +1,6 @@
 package General;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -129,7 +130,7 @@ public class BinaryTree {
     public void levelOrderTraversalUsingDFS(){
         int heightOfTree = binaryTreeHeight();
         for(int level=0; level<heightOfTree; ++level){
-           levelOrderTraversalUsingDFS(root,level);
+           levelOrderTraversalUsingDFS(root, level);
             System.out.println();
         }
     }
@@ -226,6 +227,81 @@ public class BinaryTree {
         return Math.max(binaryTreeHeight(root.leftChild),binaryTreeHeight(root.rightChild)) + 1;
     }
 
+    public void createLevelOrderLinkedLists(String functionCallType){
+        ArrayList<LinkedList<BinaryTreeNode>> result = null;
+        if(functionCallType.equals("Recursive")){
+            result = createLevelOrderLinkedListsRecursive();
+        }
+        else if(functionCallType.equals("Iterative")){
+            result = createLevelOrderLinkedListsIterative();
+        }
+        /* I have chosen the default function in this case to be the iterative function,
+        since it doesn't use the O(logN) additional calls
+        that the recursive function needs.
+         */
+        else {
+            result = createLevelOrderLinkedListsIterative();
+        }
+
+        for(LinkedList<BinaryTreeNode> list : result){
+            for(BinaryTreeNode node : list){
+                System.out.print(node+ "->");
+            }
+            System.out.println();
+        }
+    }
+
+    private ArrayList<LinkedList<BinaryTreeNode>> createLevelOrderLinkedListsIterative(){
+        ArrayList<LinkedList<BinaryTreeNode>> result = new ArrayList<LinkedList<BinaryTreeNode>>();
+
+        LinkedList<BinaryTreeNode> currentList = new LinkedList<BinaryTreeNode>();
+        if(root == null){
+            return null;
+        }
+        currentList.add(root);
+        while(!currentList.isEmpty()){
+            result.add(currentList);
+            LinkedList<BinaryTreeNode> parentsList = currentList;
+            currentList = new LinkedList<BinaryTreeNode>();
+            for(BinaryTreeNode node : parentsList){
+                if(node.leftChild!=null){
+                    currentList.add(node.leftChild);
+                }
+                if(node.rightChild!=null){
+                    currentList.add(node.rightChild);
+                }
+            }
+        }
+        return result;
+    }
+
+    private ArrayList<LinkedList<BinaryTreeNode>> createLevelOrderLinkedListsRecursive(){
+        ArrayList<LinkedList<BinaryTreeNode>> result = new ArrayList<LinkedList<BinaryTreeNode>>();
+        createLevelOrderLinkedListsRecursive(root, result, 0);
+        return result;
+    }
+
+    private void createLevelOrderLinkedListsRecursive(
+            BinaryTreeNode currentNode,
+            ArrayList<LinkedList<BinaryTreeNode>> lists,
+            int level){
+
+        if(currentNode == null){
+            return;
+        }
+        LinkedList<BinaryTreeNode> currentList = null;
+        if(lists.size() == level){
+            currentList = new LinkedList<BinaryTreeNode>();
+            lists.add(currentList);
+        }
+        else {
+            currentList = lists.get(level);
+        }
+        currentList.add(currentNode);
+        createLevelOrderLinkedListsRecursive(currentNode.leftChild, lists, level+1);
+        createLevelOrderLinkedListsRecursive(currentNode.rightChild, lists, level+1);
+    }
+
     public static void main(String[] args) {
         BinaryTree tree = new BinaryTree();
 
@@ -251,11 +327,17 @@ public class BinaryTree {
         System.out.println("\n\nLevel-order traversal (BFS)");
         tree.levelOrderTraversal();
 
-        System.out.println("\n\nLevel-order traversal (DFS)");
+        System.out.println("\nLevel-order traversal (DFS)");
         tree.levelOrderTraversalUsingDFS();
 
         System.out.println("\nLevel-order traversal spirally");
         tree.levelOrderTraversalSpirally();
+
+        System.out.println("\nCreating level order linked lists (Iterative)");
+        tree.createLevelOrderLinkedLists("");
+
+        System.out.println("\nCreating level order linked lists (Recursive)");
+        tree.createLevelOrderLinkedLists("Recursive");
 
         System.out.println("\nFinding a node:");
         System.out.println(tree.findNode(3));
