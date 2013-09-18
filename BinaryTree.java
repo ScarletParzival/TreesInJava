@@ -126,6 +126,59 @@ public class BinaryTree {
         }
     }
 
+    public void levelOrderTraversalUsingDFS(){
+        int heightOfTree = binaryTreeHeight();
+        for(int level=0; level<heightOfTree; ++level){
+           levelOrderTraversalUsingDFS(root,level);
+            System.out.println();
+        }
+    }
+
+    private void levelOrderTraversalUsingDFS(BinaryTreeNode node, int level){
+       if(level == 0){
+           System.out.print(node+" ");
+       }
+       else{
+           levelOrderTraversalUsingDFS(node.leftChild,level-1);
+           levelOrderTraversalUsingDFS(node.rightChild, level-1);
+       }
+    }
+
+    public void levelOrderTraversalSpirally(){
+
+        /*
+        if(root == null){
+            return;
+        }
+        LinkedList<BinaryTreeNode> currentLevel = new LinkedList<BinaryTreeNode>();
+        LinkedList<BinaryTreeNode> nextLevel = new LinkedList<BinaryTreeNode>();
+        boolean readLeftToRight = true;
+        currentLevel.add(root);
+        while(!currentLevel.isEmpty()){
+            BinaryTreeNode currentNode;
+            if(readLeftToRight){
+                currentNode = currentLevel.poll();
+            }
+            else{
+                currentNode = currentLevel.pollLast();
+            }
+            if(currentNode!=null){
+                System.out.print(currentNode+" ");
+                nextLevel.add(currentNode.leftChild);
+                nextLevel.add(currentNode.rightChild);
+            }
+            if(currentLevel.isEmpty()){
+                System.out.println();
+                readLeftToRight = !readLeftToRight;
+                currentLevel = nextLevel;
+                nextLevel = new LinkedList<BinaryTreeNode>();
+            }
+        }
+        This wouldn't work.
+        This actually prints the left-right pairs in reverse order.
+        */
+    }
+
     public BinaryTreeNode findNode(int key){
         BinaryTreeNode currentNode = root;
         while(currentNode!=null){
@@ -139,6 +192,17 @@ public class BinaryTree {
             }
         }
         return null;
+    }
+
+    public int binaryTreeHeight(){
+        return binaryTreeHeight(root);
+    }
+
+    private int binaryTreeHeight(BinaryTreeNode root){
+        if(root == null){
+            return 0;
+        }
+        return Math.max(binaryTreeHeight(root.leftChild),binaryTreeHeight(root.rightChild)) + 1;
     }
 
     public static void main(String[] args) {
@@ -163,8 +227,14 @@ public class BinaryTree {
         System.out.println("\n\nPost-order traversal");
         tree.postOrderTraversal(tree.root);
 
-        System.out.println("\n\nLevel-order traversal");
+        System.out.println("\n\nLevel-order traversal (BFS)");
         tree.levelOrderTraversal();
+
+        System.out.println("\n\nLevel-order traversal (DFS)");
+        tree.levelOrderTraversalUsingDFS();
+
+        System.out.println("\n\nLevel-order traversal spirally");
+        tree.levelOrderTraversalSpirally();
 
         System.out.println("\nFinding a node:");
         System.out.println(tree.findNode(3));
