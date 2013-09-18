@@ -145,6 +145,12 @@ public class BinaryTree {
     }
 
     public void levelOrderTraversalSpirally(){
+        boolean readFromLeftToRight = true;
+        for(int level=0; level<binaryTreeHeight(); ++level){
+            readFromLeftToRight = !readFromLeftToRight;
+            levelOrderTraversalSpirally(root, level, readFromLeftToRight);
+            System.out.println();
+        }
 
         /*
         if(root == null){
@@ -179,6 +185,21 @@ public class BinaryTree {
         */
     }
 
+    private void levelOrderTraversalSpirally(BinaryTreeNode node, int level, boolean readFromLeftToRight){
+        if(level == 0){
+            System.out.print(node+" ");
+        }
+        else{
+            if(readFromLeftToRight){
+               levelOrderTraversalSpirally(node.leftChild,level-1,readFromLeftToRight);
+               levelOrderTraversalSpirally(node.rightChild, level-1, readFromLeftToRight);
+            }
+            else{
+               levelOrderTraversalSpirally(node.rightChild,level-1,readFromLeftToRight);
+               levelOrderTraversalSpirally(node.leftChild, level-1, readFromLeftToRight);
+            }
+        }
+    }
     public BinaryTreeNode findNode(int key){
         BinaryTreeNode currentNode = root;
         while(currentNode!=null){
@@ -233,7 +254,7 @@ public class BinaryTree {
         System.out.println("\n\nLevel-order traversal (DFS)");
         tree.levelOrderTraversalUsingDFS();
 
-        System.out.println("\n\nLevel-order traversal spirally");
+        System.out.println("\nLevel-order traversal spirally");
         tree.levelOrderTraversalSpirally();
 
         System.out.println("\nFinding a node:");
